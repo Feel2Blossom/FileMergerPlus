@@ -1,0 +1,37 @@
+FOLDER TREE ONLY --- MODE
+
+-------------------------
+Structure: /FileMergerPlus
+-
+# Folder: FileMergerPlus/
+## File: App.config (2.2 KB)
+## File: App.xaml (1.1 KB)
+## File: App.xaml.cs (115 B)
+## File: FileMergerPlus.csproj (5.2 KB)
+## File: FodyWeavers.xml (141 B)
+## File: FodyWeavers.xsd (8.6 KB)
+## File: icon.ico (151.4 KB)
+## File: MainWindow.xaml (10.3 KB)
+## File: MainWindow.xaml.cs (50.6 KB)
+-
+## Folder: FileMergerPlus/Localization/
+### File: UiStringsCatalog.cs (31.6 KB)
+-
+## Folder: FileMergerPlus/Properties/
+### File: AssemblyInfo.cs (706 B)
+### File: Settings.Designer.cs (7.4 KB)
+### File: Settings.settings (2.1 KB)
+-
+# File: .gitignore (260 B)
+-
+# File: FileMergerPlus.sln (1007 B)
+-
+# File: LICENSE.md (222 B)
+-
+# File: README.md (646 B)
+-------------------------
+
+========== STATISTICS ==========
+Total files: 17
+Total lines: 0
+Total size: 273.3 KB (279,851 bytes)

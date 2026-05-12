@@ -1,0 +1,25 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build results
+bin/
+obj/
+packages/
+*.pdb
+*.exe
+*.dll
+
+# Fody
+FodyWeavers.xsd
+
+# User-specific files
+*.csproj.user
+*.csproj.dtbcache.json
+
+# NuGet
+*.nupkg
+*.signature.p7s

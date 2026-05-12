@@ -1,0 +1,185 @@
+<Window x:Class="FileMergerPlus.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Title="FileMergerPlus"
+        Width="1000"
+        Height="700"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        FontSize="15"
+        Background="{DynamicResource MaterialDesignPaper}"
+        Foreground="{DynamicResource MaterialDesignBody}"
+        AllowDrop="True"
+        DragEnter="Window_DragEnter"
+        DragOver="Window_DragOver"
+        DragLeave="Window_DragLeave"
+        Drop="Window_Drop"
+        Loaded="Window_Loaded"
+        Closing="Window_Closing">
+    <DockPanel LastChildFill="True" Margin="10">
+        <materialDesign:Snackbar x:Name="MainSnackbar"
+                                 DockPanel.Dock="Bottom"
+                                 VerticalAlignment="Bottom"
+                                 HorizontalAlignment="Center"
+                                 Margin="0,8,0,0" />
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <materialDesign:Card Grid.Row="0" Margin="0,0,0,8" Padding="12">
+                <StackPanel>
+                    <TextBlock x:Name="SourceSectionTitle" Text="Source" FontWeight="SemiBold" Margin="0,0,0,8" FontSize="16" />
+                    <StackPanel Orientation="Horizontal">
+                        <RadioButton x:Name="CurrentFolderRadio"
+                                     Content="Current folder"
+                                     Margin="5,3"
+                                     Checked="SourceModeChanged" />
+                        <RadioButton x:Name="SelectFolderRadio"
+                                     Content="Select folder"
+                                     Margin="10,3,5,3"
+                                     Checked="SourceModeChanged" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                        <TextBox x:Name="FolderPathTextBox"
+                                 Margin="5,3"
+                                 IsEnabled="False"
+                                 TextChanged="FolderPathTextBox_TextChanged"
+                                 materialDesign:HintAssist.Hint="Folder path" />
+                        <Button x:Name="BrowseButton"
+                                Content="Browse..."
+                                Margin="5,3"
+                                Width="130"
+                                Click="BrowseButton_Click"
+                                Style="{StaticResource MaterialDesignOutlinedButton}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox x:Name="IncludeSubfoldersCheckBox" Content="Include subfolders" Margin="5,3" IsChecked="True" />
+                        <CheckBox x:Name="IncludeHiddenFilesCheckBox" Content="Include hidden/system files" Margin="20,3,5,3" IsChecked="False" />
+                        <CheckBox x:Name="IncludeEmptyFilesCheckBox" Content="Include empty files" Margin="20,3,5,3" IsChecked="True" />
+                        <CheckBox x:Name="FolderTreeOnlyCheckBox" Content="Folder tree only" Margin="20,3,5,3" IsChecked="False" />
+                    </StackPanel>
+                </StackPanel>
+            </materialDesign:Card>
+
+            <Grid Grid.Row="1" Margin="0,0,0,8" Background="{DynamicResource MaterialDesignPaper}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <materialDesign:Card Grid.Row="0" Grid.Column="0" Margin="0,0,4,8" Padding="12">
+                    <StackPanel>
+                        <TextBlock x:Name="FileExtensionsSectionTitle" Text="File extensions" FontWeight="SemiBold" Margin="0,0,0,8" FontSize="16" />
+                        <ComboBox x:Name="TemplateComboBox"
+                                  SelectionChanged="TemplateComboBox_SelectionChanged">
+                            <ComboBoxItem Content="Custom (manual list)" />
+                            <ComboBoxItem Content="Programming (.cs, .py, .cpp, .h, ...)" />
+                            <ComboBoxItem Content="Web development (.html, .css, .js, .ts, ...)" />
+                            <ComboBoxItem Content="Text files (.txt, .md, .rst, .rtf, ...)" />
+                            <ComboBoxItem Content="Configuration (.json, .xml, .yaml, .ini, ...)" />
+                            <ComboBoxItem Content="Data files (.csv, .tsv, .sql, .log, .toml, ...)" />
+                            <ComboBoxItem Content="All files (*)" />
+                        </ComboBox>
+                        <TextBox x:Name="ExtensionsTextBox"
+                                 Margin="0,8,0,0"
+                                 materialDesign:HintAssist.Hint="Enter extensions separated by commas, e.g. .cs, .py" />
+                        <TextBlock x:Name="ExtensionsEmptyHintTextBlock" Text="Leave empty for all files" Margin="0,5,0,0" Opacity="0.8" />
+                    </StackPanel>
+                </materialDesign:Card>
+
+                <materialDesign:Card Grid.Row="0" Grid.Column="1" Margin="4,0,0,8" Padding="12">
+                    <StackPanel>
+                        <TextBlock x:Name="OutputOptionsSectionTitle" Text="Output options" FontWeight="SemiBold" Margin="0,0,0,8" FontSize="16" />
+                        <CheckBox x:Name="IncludeTreeCheckBox"
+                                  Content="Add folder tree at the beginning"
+                                  IsChecked="True"
+                                  Margin="0,3" />
+                        <CheckBox x:Name="ShowFullPathCheckBox"
+                                  Content="Show full path instead of file name"
+                                  IsChecked="False"
+                                  Margin="0,3" />
+                        <CheckBox x:Name="CopyToClipboardCheckBox"
+                                  Content="Copy result to clipboard after creation"
+                                  IsChecked="False"
+                                  Margin="0,3" />
+                        <CheckBox x:Name="IncludeWarningsSectionCheckBox"
+                                  Content="Include skipped-file warnings section"
+                                  IsChecked="True"
+                                  Margin="0,3" />
+                    </StackPanel>
+                </materialDesign:Card>
+
+                <materialDesign:Card Grid.Row="1" Grid.Column="0" Margin="0,0,4,0" Padding="12">
+                    <StackPanel>
+                        <TextBlock x:Name="ThemeSectionTitle" Text="Theme" FontWeight="SemiBold" Margin="0,0,0,8" FontSize="16" />
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <ToggleButton x:Name="ThemeToggleButton"
+                                          Width="58"
+                                          Height="30"
+                                          Margin="0,0,10,0"
+                                          HorizontalAlignment="Left"
+                                          VerticalAlignment="Center"
+                                          Checked="ThemeToggleButton_Checked"
+                                          Unchecked="ThemeToggleButton_Checked"
+                                          Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                          ToolTip="Switch between dark and light theme" />
+                            <TextBlock x:Name="ThemeToggleLabel"
+                                       Text="Dark mode"
+                                       VerticalAlignment="Center"
+                                       Opacity="0.95" />
+                        </StackPanel>
+                    </StackPanel>
+                </materialDesign:Card>
+
+                <materialDesign:Card Grid.Row="1" Grid.Column="1" Margin="4,0,0,0" Padding="12">
+                    <StackPanel>
+                        <TextBlock x:Name="LocalizationSectionTitle" Text="Localization" FontWeight="SemiBold" Margin="0,0,0,8" FontSize="16" />
+                        <ComboBox x:Name="LocalizationComboBox"
+                                  HorizontalAlignment="Stretch"
+                                  SelectionChanged="LocalizationComboBox_SelectionChanged" />
+                    </StackPanel>
+                </materialDesign:Card>
+            </Grid>
+
+            <StackPanel Grid.Row="2">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button x:Name="MergeButton"
+                            Content="Merge"
+                            Width="140"
+                            Height="38"
+                            Margin="0,0,10,0"
+                            Background="#2E7D32"
+                            Foreground="White"
+                            Style="{StaticResource MaterialDesignRaisedButton}"
+                            Click="MergeButton_Click" />
+                    <Button x:Name="CancelButton"
+                            Content="Cancel"
+                            Width="90"
+                            Height="38"
+                            IsEnabled="False"
+                            Style="{StaticResource MaterialDesignFlatButton}"
+                            Click="CancelButton_Click" />
+                </StackPanel>
+                <ProgressBar x:Name="MergeProgressBar"
+                             Height="22"
+                             Margin="0,8,0,5"
+                             Minimum="0"
+                             Maximum="100"
+                             Value="0" />
+                <TextBlock x:Name="StatusTextBlock" Text="Ready" Margin="5,0,0,5" />
+            </StackPanel>
+        </Grid>
+    </DockPanel>
+</Window>
